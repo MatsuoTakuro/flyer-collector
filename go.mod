@@ -1,4 +1,4 @@
-module src/flyer-collector
+module flyer-collector
 
 go 1.17
 
