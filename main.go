@@ -15,7 +15,7 @@ type Store struct {
 }
 
 const (
-	// TODO: 検索条件はコマンドラインから入力する（"福岡県"は40へ自動変換 or コマンドライン上で選択 等）
+	// TODO: #1 検索条件はコマンドラインから入力する（"福岡県"は40へ自動変換 or コマンドライン上で選択 等）
 	baseURL string = "https://tokubai.co.jp"
 	rawName string = "ディスカウントドラッグコスモス"
 	fukuoka int    = 40
@@ -39,9 +39,9 @@ func scrapeTokubai() {
 	var title string
 	var stores []Store
 	title, stores = scrapeThisPage(doc, sc_url)
-	// TODO: チラシ画像を取得する
-	// TODO: OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
-	// TODO: スキャンされた情報を整形し、ファイルに保存する
+	// TODO: #2 チラシ画像を取得する
+	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
+	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
 
 	// Go to next page
 	href, exists := doc.Find("span.next a").Attr("href")
