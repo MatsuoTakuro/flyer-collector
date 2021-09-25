@@ -26,7 +26,8 @@ func request(sc_url string) io.ReadCloser {
 	return res.Body
 }
 
-func scrapePage(doc *goquery.Document, sc_url string) (string, []Store) {
+// scrapeStoresList scrapes store names and urls from searched stores list pages
+func scrapeStoresList(doc *goquery.Document, sc_url string) (string, []Store) {
 	// Get the title of this page
 	title := doc.Find("title").Text()
 
@@ -37,8 +38,8 @@ func scrapePage(doc *goquery.Document, sc_url string) (string, []Store) {
 		// For each item found, get the store url
 		name := strings.TrimSpace(s.Find("div.name_text").Text())
 		href, _ := s.Attr("href")
-		storeURL := toAbsUrl(sc_url, href)
-		store := Store{name, storeURL, nil}
+		url := toAbsUrl(sc_url, href)
+		store := Store{name, url, nil}
 		stores = append(stores, store)
 	})
 	return title, stores

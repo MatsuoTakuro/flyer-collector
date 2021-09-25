@@ -9,9 +9,14 @@ import (
 )
 
 type Store struct {
-	name      string
-	storeURL  string
-	flyerImgs []string
+	name   string
+	url    string
+	flyers []Flyer
+}
+type Flyer struct {
+	id    int
+	name  string
+	image string
 }
 
 const (
@@ -40,13 +45,14 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 
 	var title string
 	var stores []Store
-	title, stores = scrapePage(doc, sc_url)
+	title, stores = scrapeStoresList(doc, sc_url)
 	// TODO: #2 チラシ画像を取得する
 	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
 	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
 
-	// Go to next page
+	// Check if next page exists
 	href, exists := doc.Find("span.next a").Attr("href")
+	// Scrape the next page if it exists
 	for exists {
 		// Set the target url
 		next_sc_url := toAbsUrl(sc_url, href)
@@ -61,15 +67,18 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 			log.Fatal(err)
 		}
 
-		_, tmpStores := scrapePage(doc, sc_url)
+		// For each item found, get the store name and url
+		_, tmpStores := scrapeStoresList(doc, sc_url)
 		stores = append(stores, tmpStores...)
+
+		// Check if next page exists, recursively
 		href, exists = doc.Find("span.next a").Attr("href")
 	}
 
 	fmt.Printf("Page title: %v\n\n", title)
 	for i, s := range stores {
 		fmt.Printf("Store name #%d : %v\n", i+1, s.name)
-		fmt.Printf("Store URL  #%d : %v\n\n", i+1, s.storeURL)
+		fmt.Printf("Store URL  #%d : %v\n\n", i+1, s.url)
 	}
 
 }
