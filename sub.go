@@ -26,7 +26,7 @@ func request(sc_url string) io.ReadCloser {
 	return res.Body
 }
 
-func scrapeThisPage(doc *goquery.Document, sc_url string) (string, []Store) {
+func scrapePage(doc *goquery.Document, sc_url string) (string, []Store) {
 	// Get the title of this page
 	title := doc.Find("title").Text()
 

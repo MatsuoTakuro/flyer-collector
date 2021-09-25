@@ -38,7 +38,7 @@ func scrapeTokubai() {
 
 	var title string
 	var stores []Store
-	title, stores = scrapeThisPage(doc, sc_url)
+	title, stores = scrapePage(doc, sc_url)
 	// TODO: #2 チラシ画像を取得する
 	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
 	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
@@ -59,7 +59,7 @@ func scrapeTokubai() {
 			log.Fatal(err)
 		}
 
-		_, tmpStores := scrapeThisPage(doc, sc_url)
+		_, tmpStores := scrapePage(doc, sc_url)
 		stores = append(stores, tmpStores...)
 		href, exists = doc.Find("span.next a").Attr("href")
 	}
