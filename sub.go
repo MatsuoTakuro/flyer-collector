@@ -39,8 +39,8 @@ func scrapeStoresList(doc *goquery.Document, sc_url string) (string, []Store) {
 		name := strings.TrimSpace(s.Find("div.name_text").Text())
 		href, _ := s.Attr("href")
 		url := toAbsUrl(sc_url, href)
-		store := Store{name, url, nil}
-		stores = append(stores, store)
+		st := Store{name, url, nil}
+		stores = append(stores, st)
 	})
 	return title, stores
 }

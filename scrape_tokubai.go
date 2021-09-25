@@ -76,9 +76,9 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	}
 
 	fmt.Printf("Page title: %v\n\n", title)
-	for i, s := range stores {
-		fmt.Printf("Store name #%d : %v\n", i+1, s.name)
-		fmt.Printf("Store URL  #%d : %v\n\n", i+1, s.url)
+	for i, st := range stores {
+		fmt.Printf("Store name #%d : %v\n", i+1, st.name)
+		fmt.Printf("Store URL  #%d : %v\n\n", i+1, st.url)
 	}
 
 }
