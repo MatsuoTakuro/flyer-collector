@@ -14,7 +14,7 @@ type Store struct {
 }
 type Flyer struct {
 	id    int
-	title string
+	desc  string
 	image string
 }
 
@@ -46,30 +46,31 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
 	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
 
-	// Check if next page exists
-	href, exists := doc.Find("span.next a").Attr("href")
-	// Scrape the next page if it exists
-	for exists {
-		// Set the target url
-		next_sc_url := toAbsUrl(sc_url, href)
+	// // Check if next page exists
+	// href, exists := doc.Find("span.next a").Attr("href")
+	// // Scrape the next page if it exists
+	// for exists {
+	// 	// Set the target url
+	// 	next_sc_url := toAbsUrl(sc_url, href)
 
-		// Request the HTML page and Load the HTML document
-		doc, err := request(next_sc_url)
-		if err != nil {
-			log.Fatal(err)
-		}
+	// 	// Request the HTML page and Load the HTML document
+	// 	doc, err := request(next_sc_url)
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
 
-		// For each store item found, get it's name, url and flyers
-		_, tmpStores := addStores(&id, doc, sc_url)
-		stores = append(stores, tmpStores...)
+	// 	// For each store item found, get it's name, url and flyers
+	// 	_, tmpStores := addStores(&id, doc, sc_url)
+	// 	stores = append(stores, tmpStores...)
 
-		// Check if next page exists, recursively
-		href, exists = doc.Find("span.next a").Attr("href")
-	}
+	// 	// Check if next page exists, recursively
+	// 	href, exists = doc.Find("span.next a").Attr("href")
+	// }
 
 	fmt.Printf("Title: %v\n\n", title)
 	for _, st := range stores {
-		fmt.Printf("Store name #%d : %v\n", st.id, st.name)
-		fmt.Printf("Store URL  #%d : %v\n\n", st.id, st.url)
+		// fmt.Printf("Store name #%d : %v\n", st.id, st.name)
+		// fmt.Printf("Store URL  #%d : %v\n\n", st.id, st.url)
+		fmt.Printf("Store flyers  #%d : %v\n\n", st.id, st.flyers)
 	}
 }

@@ -43,9 +43,9 @@ func addStores(id *int, doc *goquery.Document, sc_url string) (string, []Store) 
 		name := strings.TrimSpace(s.Find("div.name_text").Text())
 		href, _ := s.Attr("href")
 		url := toAbsUrl(sc_url, href)
-		// flyers := scrapeFlyers(url)
-		// st := Store{i, name, url, flyers}
-		st := Store{*id, name, url, nil}
+		flyers := scrapeFlyers(url)
+		st := Store{*id, name, url, flyers}
+		// st := Store{*id, name, url, nil}
 		stores = append(stores, st)
 	})
 	return title, stores
@@ -69,11 +69,11 @@ func scrapeFlyers(sc_url string) []Flyer {
 	}
 	// Find the flyer items
 	var flyers []Flyer
-	doc.Find("a.shop_index_card").Each(func(i int, s *goquery.Selection) {
-		// For each flyer item found, get the flyer's id, title and image
-		title := strings.TrimSpace(s.Find("div.name_text").Text())
-		image := "image"
-		fly := Flyer{i, title, image}
+	doc.Find("a.image_element").Each(func(i int, s *goquery.Selection) {
+		// For each flyer item found, get the flyer's id, desc and image
+		desc := strings.TrimSpace(s.Find("div.description").Text())
+		image, _ := s.Find("div.image_wrapper").Children().Attr("src")
+		fly := Flyer{i, desc, image}
 		flyers = append(flyers, fly)
 	})
 	return flyers
