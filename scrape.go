@@ -15,7 +15,7 @@ type Store struct {
 }
 
 const (
-	baseURL string = "https://tokubai.co.jp"
+	tokubaiBaseURL string = "https://tokubai.co.jp"
 )
 
 func getPrefsList() map[string]int {
@@ -26,7 +26,7 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// Set the target url
 	storeName := url.QueryEscape(rawStoreName)
 	prefsList := getPrefsList()
-	sc_url := fmt.Sprintf("%v/%v/prefectures/%d", baseURL, storeName, prefsList[prefName])
+	sc_url := fmt.Sprintf("%v/%v/prefectures/%d", tokubaiBaseURL, storeName, prefsList[prefName])
 
 	// Request the HTML page.
 	resBody := request(sc_url)
