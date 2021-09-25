@@ -4,18 +4,17 @@ import (
 	"fmt"
 	"log"
 	"net/url"
-
-	"github.com/PuerkitoBio/goquery"
 )
 
 type Store struct {
+	id     int
 	name   string
 	url    string
 	flyers []Flyer
 }
 type Flyer struct {
 	id    int
-	name  string
+	title string
 	image string
 }
 
@@ -33,19 +32,16 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	prefsList := getPrefsList()
 	sc_url := fmt.Sprintf("%v/%v/prefectures/%d", tokubaiBaseURL, storeName, prefsList[prefName])
 
-	// Request the HTML page.
-	resBody := request(sc_url)
-
-	// Load the HTML document
-	doc, err := goquery.NewDocumentFromReader(resBody)
-	resBody.Close()
+	// Request the HTML page and Load the HTML document
+	doc, err := request(sc_url)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var title string
 	var stores []Store
-	title, stores = scrapeStoresList(doc, sc_url)
+	var id int
+	title, stores = addStores(&id, doc, sc_url)
 	// TODO: #2 チラシ画像を取得する
 	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
 	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
@@ -57,28 +53,23 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 		// Set the target url
 		next_sc_url := toAbsUrl(sc_url, href)
 
-		// Request the HTML page.
-		resBody := request(next_sc_url)
-
-		// Load the HTML document
-		doc, err := goquery.NewDocumentFromReader(resBody)
-		resBody.Close()
+		// Request the HTML page and Load the HTML document
+		doc, err := request(next_sc_url)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		// For each item found, get the store name and url
-		_, tmpStores := scrapeStoresList(doc, sc_url)
+		// For each store item found, get it's name, url and flyers
+		_, tmpStores := addStores(&id, doc, sc_url)
 		stores = append(stores, tmpStores...)
 
 		// Check if next page exists, recursively
 		href, exists = doc.Find("span.next a").Attr("href")
 	}
 
-	fmt.Printf("Page title: %v\n\n", title)
-	for i, st := range stores {
-		fmt.Printf("Store name #%d : %v\n", i+1, st.name)
-		fmt.Printf("Store URL  #%d : %v\n\n", i+1, st.url)
+	fmt.Printf("Title: %v\n\n", title)
+	for _, st := range stores {
+		fmt.Printf("Store name #%d : %v\n", st.id, st.name)
+		fmt.Printf("Store URL  #%d : %v\n\n", st.id, st.url)
 	}
-
 }
