@@ -32,7 +32,8 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	prefsList := getPrefsList()
 	sc_url := fmt.Sprintf("%v/%v/prefectures/%d", tokubaiBaseURL, storeName, prefsList[prefName])
 
-	// Request the HTML page and Load the HTML document
+	// Request the HTML page and Load the HTML document, for stores list page that is the search result
+	fmt.Println("\nStarted to scrape for stores list page that is the search result")
 	doc, err := request(sc_url)
 	if err != nil {
 		log.Fatal(err)
@@ -67,13 +68,13 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// 	href, exists = doc.Find("span.next a").Attr("href")
 	// }
 
-	fmt.Printf("title: %v\n\n", title)
+	fmt.Printf("\ntitle: %v\n\n", title)
 	for _, st := range stores {
-		fmt.Printf("store #%d\n", st.id)
+		fmt.Printf("store no.%d\n", st.id)
 		fmt.Printf("  name    : %v\n", st.name)
 		fmt.Printf("  url     : %v\n", st.url)
 		for _, fly := range st.flyers {
-			fmt.Printf("  flyer #%d\n", fly.id)
+			fmt.Printf("  flyer no.%d\n", fly.id)
 			fmt.Printf("    desc  : %v\n", fly.desc)
 			fmt.Printf("    image : %v\n", fly.image)
 		}

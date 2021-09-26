@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -17,12 +18,14 @@ func request(sc_url string) (*goquery.Document, error) {
 
 	// Request the HTML page.
 	res, err := http.Get(sc_url)
+	fmt.Printf("Sent http Get request to : %v\n", sc_url)
 	if err != nil {
 		log.Fatal(err)
 	}
 	if res.StatusCode != 200 {
 		log.Fatalf("status code error: %d %s", res.StatusCode, res.Status)
 	}
+	fmt.Printf("- The respose status of the Get request sent is : %v (%v)\n", res.StatusCode, res.Status)
 
 	// Load the HTML document
 	defer res.Body.Close()
@@ -64,6 +67,7 @@ func toAbsUrl(sc_url string, weburl string) string {
 
 func scrapeFlyers(sc_url string) []Flyer {
 	// 1st Request the HTML page and Load the HTML document, for store detail page
+	fmt.Println("\nStarted to scrape for store detail page")
 	doc, err := request(sc_url)
 	if err != nil {
 		log.Fatal(err)
@@ -72,6 +76,7 @@ func scrapeFlyers(sc_url string) []Flyer {
 	href, _ := doc.Find("li.shop_header_tab:nth-child(2) a").Attr("href")
 	sc_url = toAbsUrl(sc_url, href)
 	// 2nd Request the HTML page and Load the HTML document, for the 1st flyer detail page
+	fmt.Println("For the 1st flyer detail page")
 	doc, err = request(sc_url)
 	if err != nil {
 		log.Fatal(err)
@@ -82,25 +87,30 @@ func scrapeFlyers(sc_url string) []Flyer {
 	image, _ := doc.Find("img.leaflet").Attr("src")
 	fly1st := Flyer{id, desc, image}
 	flyers = append(flyers, fly1st)
-	if len(flyers) == 1 {
-		s := strings.Split(sc_url, "/")
-		intFlyNum, err := strconv.Atoi(s[len(s)-1])
-		if err != nil {
-			log.Fatal(err)
-		}
-		flyNum := strconv.Itoa(intFlyNum + 1)
-		s[len(s)-1] = flyNum
-		sc_url = strings.Join(s, "/")
-		// 3nd Request the HTML page and Load the HTML document, for the 2nd flyer detail page
-		doc, err = request(sc_url)
-		if err != nil {
-			log.Fatal(err)
-		}
-		id++
-		desc, _ = doc.Find("img.leaflet").Attr("alt")
-		image, _ = doc.Find("img.leaflet").Attr("src")
-		fly2nd := Flyer{id, desc, image}
-		flyers = append(flyers, fly2nd)
+
+	sc_url = makeFly2ndURL(sc_url)
+	// 3nd Request the HTML page and Load the HTML document, for the 2nd flyer detail page
+	fmt.Println("For the 2nd flyer detail page")
+	doc, err = request(sc_url)
+	if err != nil {
+		log.Fatal(err)
 	}
+	id++
+	desc, _ = doc.Find("img.leaflet").Attr("alt")
+	image, _ = doc.Find("img.leaflet").Attr("src")
+	fly2nd := Flyer{id, desc, image}
+	flyers = append(flyers, fly2nd)
+
 	return flyers
+}
+
+func makeFly2ndURL(fly1stURL string) string {
+	splitUrl := strings.Split(fly1stURL, "/")
+	intFly2nd, err := strconv.Atoi(splitUrl[len(splitUrl)-1])
+	if err != nil {
+		log.Fatal(err)
+	}
+	splitUrl[len(splitUrl)-1] = strconv.Itoa(intFly2nd + 1)
+	sc_url := strings.Join(splitUrl, "/")
+	return sc_url
 }
