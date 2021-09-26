@@ -66,7 +66,7 @@ func toAbsUrl(sc_url string, weburl string) string {
 }
 
 func scrapeFlyers(sc_url string) []Flyer {
-	// 1st Request the HTML page and Load the HTML document, for store detail page
+	// 1st; Request the HTML page and Load the HTML document, for store detail page
 	fmt.Println("\nStarted to scrape for store detail page")
 	doc, err := request(sc_url)
 	if err != nil {
@@ -75,7 +75,7 @@ func scrapeFlyers(sc_url string) []Flyer {
 
 	href, _ := doc.Find("li.shop_header_tab:nth-child(2) a").Attr("href")
 	sc_url = toAbsUrl(sc_url, href)
-	// 2nd Request the HTML page and Load the HTML document, for the 1st flyer detail page
+	// 2nd; Request the HTML page and Load the HTML document, for the 1st flyer detail page
 	fmt.Println("For the 1st flyer detail page")
 	doc, err = request(sc_url)
 	if err != nil {
@@ -89,7 +89,7 @@ func scrapeFlyers(sc_url string) []Flyer {
 	flyers = append(flyers, fly1st)
 
 	sc_url = makeFly2ndURL(sc_url)
-	// 3nd Request the HTML page and Load the HTML document, for the 2nd flyer detail page
+	// 3nd; Request the HTML page and Load the HTML document, for the 2nd flyer detail page
 	fmt.Println("For the 2nd flyer detail page")
 	doc, err = request(sc_url)
 	if err != nil {
