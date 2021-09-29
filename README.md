@@ -16,7 +16,7 @@
 
 ### 4, 開発言語と主に使用するパッケージ
 - 開発言語
-  -  [Go@v1.7](https://go.dev/)
+  -  [Go@v1.17](https://go.dev/)
 - 主に使用するパッケージ
   - [github.com/PuerkitoBio/goquery@v1.7.1](https://pkg.go.dev/github.com/PuerkitoBio/goquery@v1.7.1)
   - [cloud.google.com/go/vision@v1.0.0](https://pkg.go.dev/cloud.google.com/go/vision@v1.0.0)
