@@ -10,7 +10,7 @@
 - ただ今回は、検索条件を`福岡県`&&`ディスカウントドラッグコスモス(チェーン)`に絞る
 
 
-### 3, 使用するOCRライブラリ
+### 3, 使用するOCR API
 - [GCP Vision API](https://cloud.google.com/vision?authuser=1)
 
 
