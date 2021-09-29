@@ -33,16 +33,15 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	sc_url := fmt.Sprintf("%v/%v/prefectures/%d", tokubaiBaseURL, storeName, prefsList[prefName])
 
 	// Request the HTML page and Load the HTML document, for stores list page that is the search result
-	fmt.Println("\nStarted to scrape for stores list page that is the search result")
+	fmt.Println("\nStarted to scrape for stores list page that is the search results")
 	doc, err := requestHTMLDoc(sc_url)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	var title string
 	var stores []Store
 	var id int
-	title, stores = addStores(&id, doc, sc_url)
+	_, stores = addStores(&id, doc, sc_url)
 	// // Check if next page exists
 	// href, exists := doc.Find("span.next a").Attr("href")
 	// // Scrape the next page if it exists
@@ -69,17 +68,19 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
 	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
 
-	fmt.Println("\n\n---------------------------------------------------------------------------------------------------------------------------")
-	fmt.Printf("\ntitle: %v\n\n", title)
-	for _, st := range stores {
-		fmt.Printf("store no.%d\n", st.id)
-		fmt.Printf("  name    : %v\n", st.name)
-		fmt.Printf("  url     : %v\n", st.url)
-		for _, fly := range st.flyers {
-			fmt.Printf("  flyer #%d\n", fly.id)
-			fmt.Printf("    desc  : %v\n", fly.desc)
-			fmt.Printf("    img   : %v\n", fly.imgURL)
-		}
-		fmt.Println()
-	}
+	// fmt.Println("\n\n---------------------------------------------------------------------------------------------------------------------------")
+	// fmt.Printf("\ntitle: %v\n\n", title)
+	// for _, st := range stores {
+	// 	fmt.Printf("store no.%d\n", st.id)
+	// 	fmt.Printf("  name    : %v\n", st.name)
+	// 	fmt.Printf("  url     : %v\n", st.url)
+	// 	for _, fly := range st.flyers {
+	// 		fmt.Printf("  flyer #%d\n", fly.id)
+	// 		fmt.Printf("    desc  : %v\n", fly.desc)
+	// 		fmt.Printf("    img   : %v\n", fly.imgURL)
+	// 	}
+	// 	fmt.Println()
+	// }
+	fmt.Println("\nScraping and OCR-Scanning are finished.")
+	fmt.Println()
 }
