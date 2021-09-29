@@ -74,7 +74,7 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 		fmt.Printf("  name    : %v\n", st.name)
 		fmt.Printf("  url     : %v\n", st.url)
 		for _, fly := range st.flyers {
-			fmt.Printf("  flyer no.%d\n", fly.id)
+			fmt.Printf("  flyer #%d\n", fly.id)
 			fmt.Printf("    desc  : %v\n", fly.desc)
 			fmt.Printf("    image : %v\n", fly.image)
 		}
