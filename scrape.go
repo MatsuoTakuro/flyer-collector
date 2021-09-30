@@ -62,11 +62,12 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// 	// Check if next page exists, recursively
 	// 	href, exists = doc.Find("span.next a").Attr("href")
 	// }
+
+	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用)
+
+	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
 	fmt.Println("\nStarted to save images of gotten flyers")
 	saveFlyImgsFrom(stores)
-
-	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
-	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
 
 	fmt.Println("\nScraping and OCR-Scanning are finished.")
 	fmt.Println()
