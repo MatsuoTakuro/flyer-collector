@@ -68,19 +68,6 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用、コストは要検討)
 	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
 
-	// fmt.Println("\n\n---------------------------------------------------------------------------------------------------------------------------")
-	// fmt.Printf("\ntitle: %v\n\n", title)
-	// for _, st := range stores {
-	// 	fmt.Printf("store no.%d\n", st.id)
-	// 	fmt.Printf("  name    : %v\n", st.name)
-	// 	fmt.Printf("  url     : %v\n", st.url)
-	// 	for _, fly := range st.flyers {
-	// 		fmt.Printf("  flyer #%d\n", fly.id)
-	// 		fmt.Printf("    desc  : %v\n", fly.desc)
-	// 		fmt.Printf("    img   : %v\n", fly.imgURL)
-	// 	}
-	// 	fmt.Println()
-	// }
 	fmt.Println("\nScraping and OCR-Scanning are finished.")
 	fmt.Println()
 }
