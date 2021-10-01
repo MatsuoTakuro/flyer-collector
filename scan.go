@@ -32,13 +32,12 @@ func visionScan(filePath string) {
 		log.Fatalf("Failed to create image: %v", err)
 	}
 
-	labels, err := client.DetectTexts(ctx, image, nil, 10)
+	texts, err := client.DetectTexts(ctx, image, nil, 10)
 	if err != nil {
 		log.Fatalf("Failed to detect labels: %v", err)
 	}
 
-	fmt.Println("Labels:")
-	for _, label := range labels {
-		fmt.Println(label.Description)
+	for _, text := range texts {
+		fmt.Println(text.Description)
 	}
 }
