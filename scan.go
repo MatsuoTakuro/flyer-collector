@@ -9,7 +9,7 @@ import (
 	vision "cloud.google.com/go/vision/apiv1"
 )
 
-func visionScann(filePath string) {
+func visionScan(filePath string) {
 	ctx := context.Background()
 
 	// Creates a client.
@@ -32,7 +32,7 @@ func visionScann(filePath string) {
 		log.Fatalf("Failed to create image: %v", err)
 	}
 
-	labels, err := client.DetectLabels(ctx, image, nil, 10)
+	labels, err := client.DetectTexts(ctx, image, nil, 10)
 	if err != nil {
 		log.Fatalf("Failed to detect labels: %v", err)
 	}
