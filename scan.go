@@ -5,11 +5,29 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	vision "cloud.google.com/go/vision/apiv1"
 )
 
-func visionScan(filePath string) {
+func visionScan() {
+	crPath, _ := os.Getwd()
+	dirPath := fmt.Sprintf("%v/files/", crPath)
+	err := filepath.Walk(dirPath,
+		func(path string, info os.FileInfo, err error) error {
+			if err != nil {
+				return err
+			}
+			fmt.Println(path)
+			return nil
+		})
+	if err != nil {
+		log.Println(err)
+	}
+
+}
+
+func scanFile(filePath string) {
 	ctx := context.Background()
 
 	// Creates a client.
