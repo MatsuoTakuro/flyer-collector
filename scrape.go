@@ -65,7 +65,9 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 
 	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用)
 	visionScann("/Users/user/go/src/flyer-collector/files/001_ディスカウントドラッグコスモス 久留米南店/00101_2021年9月25日〜10月1日までのチラシ_20210929185250.jpg")
+
 	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
+
 	fmt.Println("\nStarted to save images of gotten flyers")
 	saveFlyImgsFrom(stores)
 
