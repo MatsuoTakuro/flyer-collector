@@ -63,14 +63,14 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// 	href, exists = doc.Find("span.next a").Attr("href")
 	// }
 
-	// TODO: #3 OCRでスキャンする(GCP Vision APIを使用)
-	visionScan("/Users/user/go/src/flyer-collector/files/001_ディスカウントドラッグコスモス 久留米南店/00101_2021年9月25日〜10月1日までのチラシ_20211001163235.jpg")
+	fmt.Println("\nStarted to save images of gotten flyers before OCR-scanning them")
+	// saveFlyImgsFrom(stores)
+	fmt.Println(stores[0].flyers[0].desc)
 
-	// TODO: #4 スキャンされた情報を整形し、ファイルに保存する
+	// TODO: #3 ローカルファイルに保存した画像を、OCRでスキャンする(GCP Vision APIを使用)
+	visionScan("00101_2021年9月25日〜10月1日までのチラシ_20211001211902.jpg")
 
-	fmt.Println("\nStarted to save images of gotten flyers")
-	fmt.Println()
-	fmt.Println(stores)
+	// TODO: #4 スキャンで検出した情報を整形し、ファイルとして保存する
 
 	fmt.Println("\nScraping and OCR-Scanning are finished.")
 	fmt.Println()
