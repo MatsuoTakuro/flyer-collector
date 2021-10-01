@@ -64,11 +64,10 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	// }
 
 	fmt.Println("\nStarted to save images of gotten flyers before OCR-scanning them")
-	// saveFlyImgsFrom(stores)
-	fmt.Println(stores[0].flyers[0].desc)
+	saveFlyImgsFrom(stores)
 
 	// TODO: #3 ローカルファイルに保存した画像を、OCRでスキャンする(GCP Vision APIを使用)
-	visionScan("00101_2021年9月25日〜10月1日までのチラシ_20211001211902.jpg")
+	visionScan()
 
 	// TODO: #4 スキャンで検出した情報を整形し、ファイルとして保存する
 
