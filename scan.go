@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	vision "cloud.google.com/go/vision/apiv1"
 )
@@ -68,10 +69,13 @@ func scanFile(storePath, filePath string) {
 		log.Fatalf("Failed to detect labels: %v", err)
 	}
 	// saveTexts(texts)
-	fmt.Println("Start to print descriptions of texts for scanned file")
+	fmt.Println("\nStart to print descriptions of texts for scanned file")
 	for _, text := range texts {
-		fmt.Print(text.Description, " ")
+		s := strings.TrimSpace(text.Description)
+		if s != "" {
+			fmt.Print(s, ", ")
+		}
 	}
-	fmt.Println("Printing descriptions of texts is finished.")
+	fmt.Println("\nPrinting descriptions of texts is finished.")
 	fmt.Println()
 }
