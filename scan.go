@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/csv"
 	"fmt"
 	"io/fs"
 	"log"
@@ -27,11 +28,13 @@ func visionScan() {
 		}
 		if info.IsDir() && path != "." {
 			storePath = path
-			fmt.Println(storePath)
+			fmt.Printf("\nStarted scanning images of store: %v\n", storePath)
+			return nil
 		}
 		if !info.IsDir() {
-			filePath := path
-			scanFile(storePath, filePath)
+			imgfPath := path
+			scanFile(storePath, imgfPath)
+			return nil
 		}
 		return nil
 	})
@@ -41,7 +44,7 @@ func visionScan() {
 	}
 }
 
-func scanFile(storePath, filePath string) {
+func scanFile(storePath, imgfPath string) {
 	ctx := context.Background()
 
 	// Creates a client.
@@ -52,14 +55,13 @@ func scanFile(storePath, filePath string) {
 	defer client.Close()
 
 	// Sets the name of the image file to annotate.
-	filename := filePath
-
-	file, err := os.Open(filename)
+	file, err := os.Open(imgfPath)
 	if err != nil {
 		log.Fatalf("Failed to read file: %v", err)
 	}
 	defer file.Close()
 	image, err := vision.NewImageFromReader(file)
+	// _, err = vision.NewImageFromReader(file)
 	if err != nil {
 		log.Fatalf("Failed to create image: %v", err)
 	}
@@ -68,14 +70,24 @@ func scanFile(storePath, filePath string) {
 	if err != nil {
 		log.Fatalf("Failed to detect labels: %v", err)
 	}
-	// saveTexts(texts)
-	fmt.Println("\nStart to print descriptions of texts for scanned file")
-	for _, text := range texts {
-		s := strings.TrimSpace(text.Description)
-		if s != "" {
-			fmt.Print(s, ", ")
-		}
+	var records []string
+	for i, text := range texts {
+		records[i] = text.Description
 	}
-	fmt.Println("\nPrinting descriptions of texts is finished.")
-	fmt.Println()
+
+	tmpSl := strings.Split(imgfPath, "/")
+	tmpSl = strings.Split(tmpSl[len(tmpSl)-1], ".")
+	newfPath := fmt.Sprintf("%v/%v.csv", storePath, tmpSl[0])
+	csvFile, err := os.Create(newfPath)
+	if err != nil {
+		log.Fatalln("failed to create file", err)
+	}
+	defer csvFile.Close()
+	w := csv.NewWriter(csvFile)
+	defer w.Flush()
+	// Using Write
+	if err := w.Write(records); err != nil {
+		log.Fatalln("error writing record to file", err)
+	}
+	fmt.Println("Created file:", newfPath)
 }
