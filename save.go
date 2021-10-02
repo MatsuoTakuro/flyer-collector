@@ -34,7 +34,7 @@ func saveFlyImgsBy(st Store) {
 			}
 		}
 		filePath := fmt.Sprintf("%v/%03d%02d_%v_%v.jpg", dirPath, st.id, fly.id, fly.desc, time.Now().Format("2006-01-02-15:04:05"))
-		fmt.Println("\nStarted to save new image of flyer to new file")
+		fmt.Println("\nStarted to save the image of flyer to new file")
 		err := saveFlyImg(filePath, fly)
 		if err != nil {
 			panic(err)
