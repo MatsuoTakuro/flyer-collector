@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"google.golang.org/api/vision/v1"
 )
 
 func saveFlyImgsFrom(stores []Store) {
@@ -100,4 +102,8 @@ func deleteFilesUnder(dir string) error {
 		fmt.Println("Deleted file:", fileName)
 	}
 	return err
+}
+
+func saveTexts(texts []*vision.EntityAnnotation) {
+
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,22 +13,34 @@ import (
 
 func visionScan() {
 	crPath, _ := os.Getwd()
-	dirPath := fmt.Sprintf("%v/files/", crPath)
-	err := filepath.Walk(dirPath,
-		func(path string, info os.FileInfo, err error) error {
-			if err != nil {
-				return err
-			}
-			fmt.Println(path)
-			return nil
-		})
+	filesPath := fmt.Sprintf("%v/files/", crPath)
+	err := os.Chdir(filesPath)
 	if err != nil {
-		log.Println(err)
+		fmt.Printf("unable to change tmpDir path : %v\n", err)
 	}
-
+	var storePath string
+	err = filepath.Walk(".", func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			fmt.Printf("prevent panic by handling failure accessing a path %q: %v\n", path, err)
+			return err
+		}
+		if info.IsDir() && path != "." {
+			storePath = path
+			fmt.Println(storePath)
+		}
+		if !info.IsDir() {
+			filePath := path
+			scanFile(storePath, filePath)
+		}
+		return nil
+	})
+	if err != nil {
+		fmt.Printf("error walking the path %q: %v\n", filesPath, err)
+		return
+	}
 }
 
-func scanFile(filePath string) {
+func scanFile(storePath, filePath string) {
 	ctx := context.Background()
 
 	// Creates a client.
@@ -54,8 +67,11 @@ func scanFile(filePath string) {
 	if err != nil {
 		log.Fatalf("Failed to detect labels: %v", err)
 	}
-
+	// saveTexts(texts)
+	fmt.Println("Start to print descriptions of texts for scanned file")
 	for _, text := range texts {
-		fmt.Println(text.Description)
+		fmt.Print(text.Description, " ")
 	}
+	fmt.Println("Printing descriptions of texts is finished.")
+	fmt.Println()
 }
