@@ -70,7 +70,7 @@ func saveFlyImg(filePath string, fly Flyer) error {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Saved file:", filePath)
+	fmt.Println("Created file:", filePath)
 	return err
 }
 
