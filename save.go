@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 	"time"
-
-	"google.golang.org/api/vision/v1"
 )
 
 func saveFlyImgsFrom(stores []Store) {
@@ -72,7 +70,7 @@ func saveFlyImg(filePath string, fly Flyer) error {
 	if err != nil {
 		panic(err)
 	}
-
+	fmt.Println("Saved file:", filePath)
 	return err
 }
 
@@ -94,16 +92,12 @@ func deleteFilesUnder(dir string) error {
 	for i := range dirFiles {
 		file := dirFiles[i]
 		name := file.Name()
-		fileName := fmt.Sprintf("%v/%v", dir, name)
-		err := os.Remove(fileName)
+		filePath := fmt.Sprintf("%v/%v", dir, name)
+		err := os.Remove(filePath)
 		if err != nil {
 			return err
 		}
-		fmt.Println("Deleted file:", fileName)
+		fmt.Println("Deleted file:", filePath)
 	}
 	return err
-}
-
-func saveTexts(texts []*vision.EntityAnnotation) {
-
 }
