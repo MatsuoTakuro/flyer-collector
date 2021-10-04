@@ -65,6 +65,7 @@ func scanFile(storePath, imgfPath string) {
 	if err != nil {
 		log.Fatalf("Failed to create image: %v", err)
 	}
+	// TODO: #5 Vison APIをリクエスト時に、許可拒否エラーが発生する
 
 	texts, err := client.DetectTexts(ctx, image, nil, 10)
 	if err != nil {
