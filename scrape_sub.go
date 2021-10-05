@@ -42,10 +42,6 @@ func addStores(id *int, doc *goquery.Document, sc_url string) (string, []Store) 
 	// Find the store items
 	var stores []Store
 	doc.Find("a.shop_index_card").Each(func(i int, s *goquery.Selection) {
-		// for debugging
-		if i >= 2 {
-			return
-		}
 		// For each store item found, get it's id, name, url and flyers
 		*id++
 		name := strings.TrimSpace(s.Find("div.name_text").Text())
