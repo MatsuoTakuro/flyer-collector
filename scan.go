@@ -1,8 +1,8 @@
 package main
 
 import (
+	"bufio"
 	"context"
-	"encoding/csv"
 	"fmt"
 	"io/fs"
 	"log"
@@ -28,11 +28,11 @@ func visionScan() {
 		}
 		if info.IsDir() && path != "." {
 			storePath = path
-			fmt.Printf("\nStarted scanning images of store: %v\n", storePath)
 			return nil
 		}
 		if !info.IsDir() {
 			imgfPath := path
+			fmt.Printf("\nStarted scanning image: %v\n", imgfPath)
 			scanFile(storePath, imgfPath)
 			return nil
 		}
@@ -65,30 +65,30 @@ func scanFile(storePath, imgfPath string) {
 	if err != nil {
 		log.Fatalf("Failed to create image: %v", err)
 	}
-	// TODO: #5 Vison APIをリクエスト時に、許可拒否エラーが発生する
-
-	texts, err := client.DetectTexts(ctx, image, nil, 10)
+	annotations, err := client.DetectTexts(ctx, image, nil, 10)
 	if err != nil {
 		log.Fatalf("Failed to detect labels: %v", err)
-	}
-	var records []string
-	for i, text := range texts {
-		records[i] = text.Description
 	}
 
 	tmpSl := strings.Split(imgfPath, "/")
 	tmpSl = strings.Split(tmpSl[len(tmpSl)-1], ".")
-	newfPath := fmt.Sprintf("%v/%v.csv", storePath, tmpSl[0])
-	csvFile, err := os.Create(newfPath)
+	newfPath := fmt.Sprintf("%v/%v.txt", storePath, tmpSl[0])
+	f, err := os.Create(newfPath)
 	if err != nil {
-		log.Fatalln("failed to create file", err)
+		log.Fatalf("Failed to create file for saving sanned contents : %v", err)
 	}
-	defer csvFile.Close()
-	w := csv.NewWriter(csvFile)
-	defer w.Flush()
-	// Using Write
-	if err := w.Write(records); err != nil {
-		log.Fatalln("error writing record to file", err)
+	defer f.Close()
+
+	for _, annotation := range annotations {
+		fw := bufio.NewWriter(f)
+		_, err = fw.Write([]byte(annotation.Description))
+		if err != nil {
+			log.Fatalf("Failed to write sanned contents : %v", err)
+		}
+		err = fw.Flush()
+		if err != nil {
+			log.Fatalf("Failed to flush sanned contents to file : %v", err)
+		}
+		fmt.Println("Created file:", newfPath)
 	}
-	fmt.Println("Created file:", newfPath)
 }
