@@ -71,6 +71,6 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 
 	// TODO: #4 スキャンで検出した情報を整形し、ファイルとして保存する
 
-	fmt.Println("\nScraping and OCR-Scanning are finished.")
+	fmt.Println("\nScraping and ocr-scanning are finished.")
 	fmt.Println()
 }

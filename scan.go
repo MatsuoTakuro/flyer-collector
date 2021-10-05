@@ -32,7 +32,7 @@ func visionScan() {
 		}
 		if !info.IsDir() {
 			imgfPath := path
-			fmt.Printf("\nStarted scanning image: %v\n", imgfPath)
+			fmt.Printf("\nStarted ocr-scanning image: %v\n", imgfPath)
 			scanFile(storePath, imgfPath)
 			return nil
 		}
