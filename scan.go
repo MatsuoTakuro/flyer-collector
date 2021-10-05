@@ -89,6 +89,6 @@ func scanFile(storePath, imgfPath string) {
 		if err != nil {
 			log.Fatalf("Failed to flush sanned contents to file : %v", err)
 		}
-		fmt.Println("Created file:", newfPath)
 	}
+	fmt.Println("Created file:", newfPath)
 }
