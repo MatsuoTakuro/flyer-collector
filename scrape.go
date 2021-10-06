@@ -42,25 +42,28 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 	var stores []Store
 	var id int
 	stores = addStores(&id, doc, sc_url)
-	// Check if next page exists
-	href, exists := doc.Find("span.next a").Attr("href")
-	// Scrape the next page if it exists
-	for exists {
-		// Set the target url
-		next_sc_url := toAbsUrl(sc_url, href)
+	// If specified "-store" as a command line argument, skip next page
+	if *maxStores > 15 {
+		// Check if next page exists
+		href, exists := doc.Find("span.next a").Attr("href")
+		// Scrape the next page if it exists
+		for exists {
+			// Set the target url
+			next_sc_url := toAbsUrl(sc_url, href)
 
-		// Request the HTML page and Load the HTML document
-		doc, err := requestHTMLDoc(next_sc_url)
-		if err != nil {
-			log.Fatal(err)
+			// Request the HTML page and Load the HTML document
+			doc, err := requestHTMLDoc(next_sc_url)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// For each store item found, get it's name, url and flyers
+			tmpStores := addStores(&id, doc, sc_url)
+			stores = append(stores, tmpStores...)
+
+			// Check if next page exists, recursively
+			href, exists = doc.Find("span.next a").Attr("href")
 		}
-
-		// For each store item found, get it's name, url and flyers
-		tmpStores := addStores(&id, doc, sc_url)
-		stores = append(stores, tmpStores...)
-
-		// Check if next page exists, recursively
-		href, exists = doc.Find("span.next a").Attr("href")
 	}
 
 	fmt.Println("\nStarted to save images of gotten flyers before OCR-scanning them")
