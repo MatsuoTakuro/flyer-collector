@@ -35,9 +35,10 @@ func requestHTMLDoc(sc_url string) (*goquery.Document, error) {
 }
 
 // addStores add each store's names, urls and flyers, from searched stores list pages, to store collection
-func addStores(id *int, doc *goquery.Document, sc_url string) (string, []Store) {
+func addStores(id *int, doc *goquery.Document, sc_url string) []Store {
 	// Get the title of this page
 	title := doc.Find("title").Text()
+	fmt.Printf("\nStarted to scrape for stores list page's title : %v\n", title)
 
 	// Find the store items
 	var stores []Store
@@ -51,7 +52,7 @@ func addStores(id *int, doc *goquery.Document, sc_url string) (string, []Store) 
 		st := Store{*id, name, url, flyers}
 		stores = append(stores, st)
 	})
-	return title, stores
+	return stores
 }
 
 func toAbsUrl(sc_url string, weburl string) string {

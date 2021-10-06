@@ -41,7 +41,7 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 
 	var stores []Store
 	var id int
-	_, stores = addStores(&id, doc, sc_url)
+	stores = addStores(&id, doc, sc_url)
 	// Check if next page exists
 	href, exists := doc.Find("span.next a").Attr("href")
 	// Scrape the next page if it exists
@@ -56,7 +56,7 @@ func scrapeTokubai(rawStoreName string, prefName string) {
 		}
 
 		// For each store item found, get it's name, url and flyers
-		_, tmpStores := addStores(&id, doc, sc_url)
+		tmpStores := addStores(&id, doc, sc_url)
 		stores = append(stores, tmpStores...)
 
 		// Check if next page exists, recursively
