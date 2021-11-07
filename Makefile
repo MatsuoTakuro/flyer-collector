@@ -1,7 +1,7 @@
 run:
 	go build && go run flyer-collector
 
-st2:
+test:
 	go build && go run flyer-collector -store=2
 
 rmf:
