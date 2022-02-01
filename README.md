@@ -21,4 +21,6 @@
     - バージョン・アップデートあり次第、更新する予定
 - 主に使用するパッケージ
   - [github.com/PuerkitoBio/goquery@v1.7.1](https://pkg.go.dev/github.com/PuerkitoBio/goquery@v1.7.1)
+    - HTMLドキュメントからの読み取り
   - [cloud.google.com/go/vision@v1.0.0](https://pkg.go.dev/cloud.google.com/go/vision@v1.0.0)
+    - チラシ画像へのOCRスキャン
